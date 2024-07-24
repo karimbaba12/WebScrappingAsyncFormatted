@@ -163,7 +163,7 @@ export const formatEmploymentPeriod = (periodStr) => {
         { pattern: /(\d{1,2}) ([A-Za-z]+), (\d{4}) - (\d{1,2}) ([A-Za-z]+), (\d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
         { pattern: /Permanent/, handler: () => ({ number: 0, scale: 'permanent' }) }
     ];
-
+    
     for (let { pattern, handler } of patterns) {
         const match = periodStr.match(pattern);
         if (match) {
@@ -191,147 +191,406 @@ export function formatString(locationStr){
 }
 
 
-//location format belong my array
-export function splitLocationString(inputStr){
+
+
+// export function splitLocationString(inputStr) {
+//     const structure = {
+//         eng: {
+//             countries: {
+//                 lebanon: {
+//                     regions: {
+//                         "beirut": ["beirut"],
+//                         "mount lebanon": ["matn", "maten", "aley", "baabda", "chouf", "byblos (jbeil)", "keserwan"],
+//                         "north lebanon": ["tripoli", "batroun", "zgharta", "bsharre", "koura", "akkar"],
+//                         "bekaa": ["western beqaa", "zahleh", "rachaya"],
+//                         "south lebanon": ["sidon", "jezzine", "tyr"],
+//                         "nabatieh": ["nabatiyeh", "hasbaya", "marjaayoun", "bint jbeil"],
+//                         "baalbek-hermel": ["baalbek", "hermel"]
+//                     }
+//                 },
+//                 libya: {
+//                     regions: {
+//                         "tripoli": ["tripoli"] // Example region in Libya
+//                     }
+//                 },
+//                 egypt: {},
+//                 syria: {},
+//                 jordan: {},
+//                 qatar: {},
+//                 kenya: {},
+//                 france: {},
+//                 pakistan: {},
+//                 morocco: {},
+//                 tunisia: {}
+//             }
+//         },
+//         ara: {
+//             المناطق: {
+//                 لبنان: {
+//                     مناطق: {
+//                         "جبل لبنان": ["متن", "متين", "عاليه", "بعبدا", "شوف", "جبيل", "كسروان"],
+//                         "الشمال": ["طرابلس", "الكورة", "بشري", "البترون", "عكار", "زغرتا"],
+//                         "البقاع": ["البقاع الغربي", "الهرمل", "بعلبك", "زحلة", "راشيا"],
+//                         "بعلبك-الهرمل": ["الهرمل", "بعلبك"],
+//                         "الجنوب": ["صيدا", "جزين", "صور"],
+//                         "النبطية": ["النبطية", "حاصبيا", "مرجعيون", "بنت جبيل"],
+//                         "بيروت": ["بيروت"]
+//                     }
+//                 },
+//                 ليبيا: {
+//                     مناطق: {
+//                         "طرابلس": ["طرابلس"]
+//                     }
+//                 },
+//                 مصر: {},
+//                 سوريا: {},
+//                 الأردن: {},
+//                 قطر: {},
+//                 كينيا: {},
+//                 فرنسا: {},
+//                 باكستان: {},
+//                 المغرب: {},
+//                 تونس: {}
+//             }
+//         }
+//     };
+
+//     const matches = [];
+//     const addedCombos = new Set(); // To track added combinations
+
+//     // Normalize the input for consistent matching
+//     const normalizedInput = inputStr.toLowerCase().replace(/[^\w\s-]/g, '').trim();
+
+//     // Function to add matches to matches array
+//     function addMatches(country, region, area) {
+//         let result = country;
+//         if (region) {
+//             result += `_${region}`;
+//         }
+//         if (area) {
+//             result += `_${area}`;
+//         }
+//         result = result.trim().replace(/\s+/g, '_');
+
+//         if (!addedCombos.has(result)) {
+//             matches.push(result);
+//             addedCombos.add(result);
+//         }
+//     }
+
+//     // Function to process matches for a specific country and its regions
+//     function processCountry(countryKey, regions) {
+//         for (const regionKey in regions) {
+//             const region = regions[regionKey];
+//             if (normalizedInput.includes(regionKey.toLowerCase())) {
+//                 addMatches(countryKey, regionKey); // Add region matches
+
+//                 // Check for specific areas
+//                 for (const area of region) {
+//                     if (normalizedInput.includes(area.toLowerCase())) {
+//                         addMatches(countryKey, regionKey, area); // Add area matches
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     // Check in English structure
+//     for (const countryKey in structure.eng.countries) {
+//         const country = structure.eng.countries[countryKey];
+//         if (normalizedInput.includes(countryKey)) {
+//             addMatches(countryKey); // Add the country itself
+
+//             if (country.regions) {
+//                 processCountry(countryKey, country.regions);
+//             }
+//         }
+//     }
+
+//     // Check in Arabic structure
+//     for (const countryKey in structure.ara.المناطق) {
+//         const country = structure.ara.المناطق[countryKey];
+//         if (normalizedInput.includes(countryKey)) {
+//             addMatches(countryKey); // Add the country itself
+
+//             if (country.مناطق) {
+//                 processCountry(countryKey, country.مناطق);
+//             }
+//         }
+//     }
+
+//     // Return results directly
+//     return matches;
+// }
+
+// export function splitLocationString(inputStr) {
+//     const structure = {
+//         eng: {
+//             countries: {
+//                 lebanon: {
+//                     regions: {
+//                         "beirut": ["beirut"],
+//                         "mount lebanon": ["matn", "maten", "aley", "baabda", "chouf", "byblos (jbeil)", "keserwan"],
+//                         "north lebanon": ["tripoli", "batroun", "zgharta", "bsharre", "koura", "akkar"],
+//                         "beqaa": ["western beqaa", "zahleh", "rachaya"],
+//                         "south lebanon": ["sidon", "jezzine", "tyr"],
+//                         "nabatieh": ["nabatiyeh", "hasbaya", "marjaayoun", "bint jbeil"],
+//                         "baalbek-hermel": ["baalbek", "hermel"]
+//                     }
+//                 },
+//                 libya: {
+//                     regions: {
+//                         "tripoli": ["tripoli"] // Example region in Libya
+//                     }
+//                 },
+//                 egypt: {},
+//                 syria: {},
+//                 jordan: {},
+//                 qatar: {},
+//                 kenya: {},
+//                 france: {},
+//                 pakistan: {},
+//                 morocco: {},
+//                 tunisia: {}
+//             }
+//         },
+//         ara: {
+//             المناطق: {
+//                 لبنان: {
+//                     مناطق: {
+//                         "جبل لبنان": ["متن", "متين", "عاليه", "بعبدا", "شوف", "جبيل", "كسروان"],
+//                         "الشمال": ["طرابلس", "الكورة", "بشري", "البترون", "عكار", "زغرتا"],
+//                         "البقاع": ["البقاع الغربي", "الهرمل", "بعلبك", "زحلة", "راشيا"],
+//                         "بعلبك-الهرمل": ["الهرمل", "بعلبك"],
+//                         "الجنوب": ["صيدا", "جزين", "صور"],
+//                         "النبطية": ["النبطية", "حاصبيا", "مرجعيون", "بنت جبيل"],
+//                         "بيروت": ["بيروت"]
+//                     }
+//                 },
+//                 ليبيا: {
+//                     مناطق: {
+//                         "طرابلس": ["طرابلس"]
+//                     }
+//                 },
+//                 مصر: {},
+//                 سوريا: {},
+//                 الأردن: {},
+//                 قطر: {},
+//                 كينيا: {},
+//                 فرنسا: {},
+//                 باكستان: {},
+//                 المغرب: {},
+//                 تونس: {}
+//             }
+//         }
+//     };
+
+//     const matches = [];
+//     const addedCombos = new Set(); // To track added combinations
+
+//     // Normalize the input for consistent matching
+//     const normalizedInput = inputStr.toLowerCase().replace(/[^\w\s-]/g, '').trim();
+
+//     // Function to add matches to matches array
+//     function addMatches(country, region, area) {
+//         let result = country;
+//         if (region) {
+//             result += `_${region}`;
+//         }
+//         if (area) {
+//             result += `_${area}`;
+//         }
+//         result = result.trim().replace(/\s+/g, '_');
+
+//         if (!addedCombos.has(result)) {
+//             matches.push(result);
+//             addedCombos.add(result);
+//         }
+//     }
+
+//     // Function to process matches for a specific country and its regions
+//     function processCountry(countryKey, regions) {
+//         for (const regionKey in regions) {
+//             const region = regions[regionKey];
+//             if (normalizedInput.includes(regionKey.toLowerCase())) {
+//                 addMatches(countryKey, regionKey); // Add region matches
+
+//                 // Check for specific areas
+//                 for (const area of region) {
+//                     if (normalizedInput.includes(area.toLowerCase())) {
+//                         addMatches(countryKey, regionKey, area); // Add area matches
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     // Check in English structure
+//     for (const countryKey in structure.eng.countries) {
+//         const country = structure.eng.countries[countryKey];
+//         if (normalizedInput.includes(countryKey)) {
+//             addMatches(countryKey); // Add the country itself
+
+//             if (country.regions) {
+//                 processCountry(countryKey, country.regions);
+//             }
+//         }
+//     }
+
+//     // Check in Arabic structure
+//     for (const countryKey in structure.ara.المناطق) {
+//         const country = structure.ara.المناطق[countryKey];
+//         if (normalizedInput.includes(countryKey)) {
+//             addMatches(countryKey); // Add the country itself
+
+//             if (country.مناطق) {
+//                 processCountry(countryKey, country.مناطق);
+//             }
+//         }
+//     }
+
+//     // Return results directly
+//     return matches;
+// }
+
+
+export function splitLocationString(inputStr) {
     const structure = {
         eng: {
             countries: {
                 lebanon: {
-                    governates: ["beirut", "mount lebanon", "north lebanon", "akkar", "bekaa", "baalbek-hermel", "south lebanon", "nabatieh","beqaa"],
-                    caza: ["beirut", "tripoli", "zgharta", "koura", "bsharre", "batroun", "hermel", "baalbek", "byblos (jbeil)", "keserwan", "matn",
-                        "baabda", "aley", "chouf", "zahleh", "western Beqaa", "rachaya", "sidon", "jezzine", "tyre", "nabatiyeh", "hasbaya", "marjaayoun", "bint Jbeil"]
+                    regions: {
+                        "beirut": ["beirut"],
+                        "mount lebanon": ["matn", "maten", "aley", "baabda", "chouf", "byblos (jbeil)", "keserwan"],
+                        "north lebanon": ["tripoli", "batroun", "zgharta", "bsharre", "koura", "akkar"],
+                        "beqaa": ["western beqaa", "zahleh", "rachaya"],
+                        "south lebanon": ["sidon", "jezzine", "tyr"],
+                        "nabatieh": ["nabatiyeh", "hasbaya", "marjaayoun", "bint jbeil"],
+                        "baalbek-hermel": ["baalbek", "hermel"]
+                    }
                 },
-                iraq: {},
-                jordan: {},
-                syria: {},
-                pakistan: {},
+                libya: {
+                    regions: {
+                        "tripoli": ["tripoli"] // Example region in Libya
+                    }
+                },
                 egypt: {},
+                syria: {},
+                jordan: {},
                 qatar: {},
-                morocco: {},
                 kenya: {},
-                france: {}
+                france: {},
+                pakistan: {},
+                morocco: {},
+                tunisia: {}
             }
         },
         ara: {
             المناطق: {
                 لبنان: {
-                    محافظة: ["عكار", "الشمال", "بعلبك-الهرمل", "بيروت", "جبل لبنان", "البقاع", "الجنوب", "النبطية"],
-                    قضاء: ["عكار", "المنية-الضنية", "طرابلس", "زغرتا", "الكورة", "بشري", "البترون", "الهرمل", "بعلبك", "بيروت", "جبيل", "كسروان", "المتن", "بعبدا", "عالية", "الشوف", "زحلة", "البقاع الغربي", "راشَيا", "صيدا", "جزين", "صور", "النبطية", "حاصبيا", "مرجعيون", "بنت جبيل"]
+                    مناطق: {
+                        "جبل لبنان": ["متن", "متين", "عاليه", "بعبدا", "شوف", "جبيل", "كسروان"],
+                        "الشمال": ["طرابلس", "الكورة", "بشري", "البترون", "عكار", "زغرتا"],
+                        "البقاع": ["البقاع الغربي", "الهرمل", "بعلبك", "زحلة", "راشيا"],
+                        "بعلبك-الهرمل": ["الهرمل", "بعلبك"],
+                        "الجنوب": ["صيدا", "جزين", "صور"],
+                        "النبطية": ["النبطية", "حاصبيا", "مرجعيون", "بنت جبيل"],
+                        "بيروت": ["بيروت"]
+                    }
                 },
-                العراق: {},
-                المغرب: {},
-                الاردن: {},
-                الباكستان: {},
+                ليبيا: {
+                    مناطق: {
+                        "طرابلس": ["طرابلس"]
+                    }
+                },
                 مصر: {},
-                قطر: {},
                 سوريا: {},
+                الأردن: {},
+                قطر: {},
+                كينيا: {},
                 فرنسا: {},
-                كينيا: {}
+                باكستان: {},
+                المغرب: {},
+                تونس: {}
             }
         }
     };
 
-    // const matches = [];
-
-    // // Normalize the input for consistent matching
-    // const normalizedInput = inputStr.toLowerCase();
-
-    // // Check countries in English structure
-    // for (const country in structure.eng.countries) {
-    //     if (normalizedInput.includes(country)) {
-    //         matches.push(country);
-    //     }
-
-    //     // Check cities in English structure
-    //     for (const city of structure.eng.countries[country].cities || []) {
-    //         if (normalizedInput.includes(city)) {
-    //             matches.push(city);
-    //         }
-    //     }
-
-    //     // Check governates in English structure
-    //     for (const governate of structure.eng.countries[country].governates || []) {
-    //         if (normalizedInput.includes(governate)) {
-    //             matches.push(governate);
-    //         }
-    //     }
-    // }
-
-    // // Check countries in Arabic structure
-    // for (const country in structure.ara.المناطق) {
-    //     if (normalizedInput.includes(country)) {
-    //         matches.push(country);
-    //     }
-
-    //     // Check محافظة in Arabic structure
-    //     for (const governate of structure.ara.المناطق[country].محافظة || []) {
-    //         if (normalizedInput.includes(governate)) {
-    //             matches.push(governate);
-    //         }
-    //     }
-
-    //     // Check قضاء in Arabic structure
-    //     for (const qadaa of structure.ara.المناطق[country].قضاء || []) {
-    //         if (normalizedInput.includes(qadaa)) {
-    //             matches.push(qadaa);
-    //         }
-    //     }
-    // }
-
-    // return matches;
-
-
-       const matchesSet = new Set();
+    const matches = [];
+    const addedCombos = new Set(); // To track added combinations
 
     // Normalize the input for consistent matching
-    const normalizedInput = inputStr.toLowerCase();
+    const normalizedInput = inputStr.toLowerCase().replace(/[^\w\s-]/g, '').trim();
 
-    // Check countries in English structure
-    for (const country in structure.eng.countries) {
-        if (normalizedInput.includes(country)) {
-            matchesSet.add(country);
+    // Function to add matches to matches array
+    function addMatches(country, region, area) {
+        let result = country;
+        if (region) {
+            result += `_${region}`;
         }
+        if (area) {
+            result += `_${area}`;
+        }
+        result = result.trim().replace(/\s+/g, '_');
 
-        // Check caza in English structure
-        for (const city of structure.eng.countries[country].caza || []) {
-            if (normalizedInput.includes(city)) {
-                matchesSet.add(city);
+        if (!addedCombos.has(result)) {
+            matches.push(result);
+            addedCombos.add(result);
+        }
+    }
+
+    // Function to process matches for a specific country and its regions
+    function processCountry(countryKey, regions) {
+        for (const regionKey in regions) {
+            const region = regions[regionKey];
+            let regionMatched = false;
+            if (normalizedInput.includes(regionKey.toLowerCase())) {
+                addMatches(countryKey, regionKey); // Add region matches
+                regionMatched = true;
             }
-        }
 
-        // Check governates in English structure
-        for (const governate of structure.eng.countries[country].governates || []) {
-            if (normalizedInput.includes(governate)) {
-                matchesSet.add(governate);
+            for (const area of region) {
+                if (normalizedInput.includes(area.toLowerCase())) {
+                    if (!regionMatched) {
+                        addMatches(countryKey, regionKey); // Add region if not already added
+                        regionMatched = true;
+                    }
+                    addMatches(countryKey, regionKey, area); // Add area matches
+                }
             }
         }
     }
 
-    // Check countries in Arabic structure
-    for (const country in structure.ara.المناطق) {
-        if (normalizedInput.includes(country)) {
-            matchesSet.add(country);
-        }
+    // Check in English structure
+    for (const countryKey in structure.eng.countries) {
+        const country = structure.eng.countries[countryKey];
+        if (normalizedInput.includes(countryKey)) {
+            addMatches(countryKey); // Add the country itself
 
-        // Check محافظة in Arabic structure
-        for (const governate of structure.ara.المناطق[country].محافظة || []) {
-            if (normalizedInput.includes(governate)) {
-                matchesSet.add(governate);
-            }
-        }
-
-        // Check قضاء in Arabic structure
-        for (const qadaa of structure.ara.المناطق[country].قضاء || []) {
-            if (normalizedInput.includes(qadaa)) {
-                matchesSet.add(qadaa);
+            if (country.regions) {
+                processCountry(countryKey, country.regions);
             }
         }
     }
 
-    // Convert set to array and return
-    return Array.from(matchesSet);
+    // Check in Arabic structure
+    for (const countryKey in structure.ara.المناطق) {
+        const country = structure.ara.المناطق[countryKey];
+        if (normalizedInput.includes(countryKey)) {
+            addMatches(countryKey); // Add the country itself
 
+            if (country.مناطق) {
+                processCountry(countryKey, country.مناطق);
+            }
+        }
+    }
+
+    // Return results directly without additional filtering
+    return matches;
 }
+
+
+
 
 
 
@@ -351,4 +610,7 @@ export function contractDaleel(inputStr) {
     }
 
     // Convert set to array and return
-    return Array.from(matchesSet);}
+    return Array.from(matchesSet);
+    
+
+}
