@@ -614,3 +614,66 @@ export function contractDaleel(inputStr) {
     
 
 }
+
+
+export function parseYesNo(input) {
+    const normalizedInput = input.trim().toLowerCase();
+
+    if (normalizedInput === "yes") {
+        return true;
+    } else if (normalizedInput === "no") {
+        return false;
+    } else {
+        throw new Error("Input must be 'yes' or 'no'");
+    }
+}
+
+
+export function sectorsFormat(input) {
+    // Normalize the input string by converting to lowercase and trimming whitespace
+    const normalizedInput = input.toLowerCase().trim();
+
+    // Split the input string by commas and trim each part
+    const parts = normalizedInput.split(',').map(part => part.trim());
+
+    // Format each part by replacing non-word characters with underscores and removing extra spaces
+    const formattedParts = parts.map(part => part.replace(/[^\w\s]/g, '').replace(/\s+/g, '_'));
+
+    return formattedParts;
+}
+
+
+export function parseDegree(input) {
+    // Normalize the input string by converting to lowercase and trimming whitespace
+    const normalizedInput = input.toLowerCase().trim();
+
+    // Define mappings of degree keywords to their corresponding output arrays
+    const degreeMappings = {
+        "bachelor": ["Bachelor"],
+        "bs": ["Bachelor"],
+        "bss": ["Bachelor"],
+        "phd": ["phd"],
+        "doctor": ["phd"],
+        "master": ["master"],
+        "ms": ["master"]
+    };
+
+    // Split the input string by spaces and check each part
+    const parts = normalizedInput.split(/\s+/);
+
+    // Initialize an array to store the matched degrees
+    const matchedDegrees = [];
+
+    // Iterate over each part of the input
+    parts.forEach(part => {
+        if (degreeMappings[part]) {
+            matchedDegrees.push(...degreeMappings[part]);
+        }
+    });
+
+    // Remove duplicates from the matched degrees array
+    const uniqueDegrees = [...new Set(matchedDegrees)];
+
+    // Return the unique matched degrees array
+    return uniqueDegrees;
+}

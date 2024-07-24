@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import "dotenv/config";
-import { formatDate, formatLocation,formatSectors ,formatSalaryRange , formatSalary, formatEmploymentPeriod, compareDates, formatDateAsUnix , formatString,splitLocationString,contractDaleel} from './utils.js';
+import { formatDate, formatLocation,parseDegree ,formatSalaryRange , formatSalary, formatEmploymentPeriod, compareDates, formatDateAsUnix , formatString,splitLocationString,contractDaleel,parseYesNo,sectorsFormat} from './utils.js';
 
 const baseUrl = process.env.DALEELMADANI_URL || 'https://daleel-madani.org'
 
@@ -68,12 +68,13 @@ export const fetchJobs = async () => {
                 deadlineDaleel: formatDateAsUnix(deadline,'EEEE, dd MMMM yyyy'),
                 modifiedDaleel: formatDateAsUnix(modifiedDate,'dd MMM, yyyy'),
                 agency: agency,
-                coverLetter: requiresCoverLetter.toUpperCase(),
-                sectors: formatSectors(sectors),
+                coverLetter: parseYesNo(requiresCoverLetter.toUpperCase()),
+                sectors: sectorsFormat(sectors),
                 employmentPeriod: formatEmploymentPeriod(employmentPeriod),
                 salary: formatSalary(salary),
                 salaryRange: formatSalaryRange(salaryRange),
                 educationDegree: educationDegree,
+                DaleelDegree : parseDegree(educationDegree),
                 deadlineAppOut : deadlineOut,
                 deadlineAppIn : deadlineIn,
             };
@@ -99,6 +100,8 @@ export const fetchJobs = async () => {
             console.log(`Salary:  ${JSON.stringify(jobDetails.salary, null, 2)}`) ;
             console.log(`Salary range:  ${JSON.stringify(jobDetails.salaryRange, null, 2)}`);
             console.log(`Education degree: ${jobDetails.educationDegree}`);
+            console.log(`Education degree: ${jobDetails.DaleelDegree}`);
+
            
 
 
