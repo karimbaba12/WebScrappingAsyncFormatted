@@ -193,265 +193,6 @@ export function formatString(locationStr){
 
 
 
-// export function splitLocationString(inputStr) {
-//     const structure = {
-//         eng: {
-//             countries: {
-//                 lebanon: {
-//                     regions: {
-//                         "beirut": ["beirut"],
-//                         "mount lebanon": ["matn", "maten", "aley", "baabda", "chouf", "byblos (jbeil)", "keserwan"],
-//                         "north lebanon": ["tripoli", "batroun", "zgharta", "bsharre", "koura", "akkar"],
-//                         "bekaa": ["western beqaa", "zahleh", "rachaya"],
-//                         "south lebanon": ["sidon", "jezzine", "tyr"],
-//                         "nabatieh": ["nabatiyeh", "hasbaya", "marjaayoun", "bint jbeil"],
-//                         "baalbek-hermel": ["baalbek", "hermel"]
-//                     }
-//                 },
-//                 libya: {
-//                     regions: {
-//                         "tripoli": ["tripoli"] // Example region in Libya
-//                     }
-//                 },
-//                 egypt: {},
-//                 syria: {},
-//                 jordan: {},
-//                 qatar: {},
-//                 kenya: {},
-//                 france: {},
-//                 pakistan: {},
-//                 morocco: {},
-//                 tunisia: {}
-//             }
-//         },
-//         ara: {
-//             المناطق: {
-//                 لبنان: {
-//                     مناطق: {
-//                         "جبل لبنان": ["متن", "متين", "عاليه", "بعبدا", "شوف", "جبيل", "كسروان"],
-//                         "الشمال": ["طرابلس", "الكورة", "بشري", "البترون", "عكار", "زغرتا"],
-//                         "البقاع": ["البقاع الغربي", "الهرمل", "بعلبك", "زحلة", "راشيا"],
-//                         "بعلبك-الهرمل": ["الهرمل", "بعلبك"],
-//                         "الجنوب": ["صيدا", "جزين", "صور"],
-//                         "النبطية": ["النبطية", "حاصبيا", "مرجعيون", "بنت جبيل"],
-//                         "بيروت": ["بيروت"]
-//                     }
-//                 },
-//                 ليبيا: {
-//                     مناطق: {
-//                         "طرابلس": ["طرابلس"]
-//                     }
-//                 },
-//                 مصر: {},
-//                 سوريا: {},
-//                 الأردن: {},
-//                 قطر: {},
-//                 كينيا: {},
-//                 فرنسا: {},
-//                 باكستان: {},
-//                 المغرب: {},
-//                 تونس: {}
-//             }
-//         }
-//     };
-
-//     const matches = [];
-//     const addedCombos = new Set(); // To track added combinations
-
-//     // Normalize the input for consistent matching
-//     const normalizedInput = inputStr.toLowerCase().replace(/[^\w\s-]/g, '').trim();
-
-//     // Function to add matches to matches array
-//     function addMatches(country, region, area) {
-//         let result = country;
-//         if (region) {
-//             result += `_${region}`;
-//         }
-//         if (area) {
-//             result += `_${area}`;
-//         }
-//         result = result.trim().replace(/\s+/g, '_');
-
-//         if (!addedCombos.has(result)) {
-//             matches.push(result);
-//             addedCombos.add(result);
-//         }
-//     }
-
-//     // Function to process matches for a specific country and its regions
-//     function processCountry(countryKey, regions) {
-//         for (const regionKey in regions) {
-//             const region = regions[regionKey];
-//             if (normalizedInput.includes(regionKey.toLowerCase())) {
-//                 addMatches(countryKey, regionKey); // Add region matches
-
-//                 // Check for specific areas
-//                 for (const area of region) {
-//                     if (normalizedInput.includes(area.toLowerCase())) {
-//                         addMatches(countryKey, regionKey, area); // Add area matches
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     // Check in English structure
-//     for (const countryKey in structure.eng.countries) {
-//         const country = structure.eng.countries[countryKey];
-//         if (normalizedInput.includes(countryKey)) {
-//             addMatches(countryKey); // Add the country itself
-
-//             if (country.regions) {
-//                 processCountry(countryKey, country.regions);
-//             }
-//         }
-//     }
-
-//     // Check in Arabic structure
-//     for (const countryKey in structure.ara.المناطق) {
-//         const country = structure.ara.المناطق[countryKey];
-//         if (normalizedInput.includes(countryKey)) {
-//             addMatches(countryKey); // Add the country itself
-
-//             if (country.مناطق) {
-//                 processCountry(countryKey, country.مناطق);
-//             }
-//         }
-//     }
-
-//     // Return results directly
-//     return matches;
-// }
-
-// export function splitLocationString(inputStr) {
-//     const structure = {
-//         eng: {
-//             countries: {
-//                 lebanon: {
-//                     regions: {
-//                         "beirut": ["beirut"],
-//                         "mount lebanon": ["matn", "maten", "aley", "baabda", "chouf", "byblos (jbeil)", "keserwan"],
-//                         "north lebanon": ["tripoli", "batroun", "zgharta", "bsharre", "koura", "akkar"],
-//                         "beqaa": ["western beqaa", "zahleh", "rachaya"],
-//                         "south lebanon": ["sidon", "jezzine", "tyr"],
-//                         "nabatieh": ["nabatiyeh", "hasbaya", "marjaayoun", "bint jbeil"],
-//                         "baalbek-hermel": ["baalbek", "hermel"]
-//                     }
-//                 },
-//                 libya: {
-//                     regions: {
-//                         "tripoli": ["tripoli"] // Example region in Libya
-//                     }
-//                 },
-//                 egypt: {},
-//                 syria: {},
-//                 jordan: {},
-//                 qatar: {},
-//                 kenya: {},
-//                 france: {},
-//                 pakistan: {},
-//                 morocco: {},
-//                 tunisia: {}
-//             }
-//         },
-//         ara: {
-//             المناطق: {
-//                 لبنان: {
-//                     مناطق: {
-//                         "جبل لبنان": ["متن", "متين", "عاليه", "بعبدا", "شوف", "جبيل", "كسروان"],
-//                         "الشمال": ["طرابلس", "الكورة", "بشري", "البترون", "عكار", "زغرتا"],
-//                         "البقاع": ["البقاع الغربي", "الهرمل", "بعلبك", "زحلة", "راشيا"],
-//                         "بعلبك-الهرمل": ["الهرمل", "بعلبك"],
-//                         "الجنوب": ["صيدا", "جزين", "صور"],
-//                         "النبطية": ["النبطية", "حاصبيا", "مرجعيون", "بنت جبيل"],
-//                         "بيروت": ["بيروت"]
-//                     }
-//                 },
-//                 ليبيا: {
-//                     مناطق: {
-//                         "طرابلس": ["طرابلس"]
-//                     }
-//                 },
-//                 مصر: {},
-//                 سوريا: {},
-//                 الأردن: {},
-//                 قطر: {},
-//                 كينيا: {},
-//                 فرنسا: {},
-//                 باكستان: {},
-//                 المغرب: {},
-//                 تونس: {}
-//             }
-//         }
-//     };
-
-//     const matches = [];
-//     const addedCombos = new Set(); // To track added combinations
-
-//     // Normalize the input for consistent matching
-//     const normalizedInput = inputStr.toLowerCase().replace(/[^\w\s-]/g, '').trim();
-
-//     // Function to add matches to matches array
-//     function addMatches(country, region, area) {
-//         let result = country;
-//         if (region) {
-//             result += `_${region}`;
-//         }
-//         if (area) {
-//             result += `_${area}`;
-//         }
-//         result = result.trim().replace(/\s+/g, '_');
-
-//         if (!addedCombos.has(result)) {
-//             matches.push(result);
-//             addedCombos.add(result);
-//         }
-//     }
-
-//     // Function to process matches for a specific country and its regions
-//     function processCountry(countryKey, regions) {
-//         for (const regionKey in regions) {
-//             const region = regions[regionKey];
-//             if (normalizedInput.includes(regionKey.toLowerCase())) {
-//                 addMatches(countryKey, regionKey); // Add region matches
-
-//                 // Check for specific areas
-//                 for (const area of region) {
-//                     if (normalizedInput.includes(area.toLowerCase())) {
-//                         addMatches(countryKey, regionKey, area); // Add area matches
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     // Check in English structure
-//     for (const countryKey in structure.eng.countries) {
-//         const country = structure.eng.countries[countryKey];
-//         if (normalizedInput.includes(countryKey)) {
-//             addMatches(countryKey); // Add the country itself
-
-//             if (country.regions) {
-//                 processCountry(countryKey, country.regions);
-//             }
-//         }
-//     }
-
-//     // Check in Arabic structure
-//     for (const countryKey in structure.ara.المناطق) {
-//         const country = structure.ara.المناطق[countryKey];
-//         if (normalizedInput.includes(countryKey)) {
-//             addMatches(countryKey); // Add the country itself
-
-//             if (country.مناطق) {
-//                 processCountry(countryKey, country.مناطق);
-//             }
-//         }
-//     }
-
-//     // Return results directly
-//     return matches;
-// }
 
 
 export function splitLocationString(inputStr) {
@@ -624,7 +365,7 @@ export function parseYesNo(input) {
     } else if (normalizedInput === "no") {
         return false;
     } else {
-        throw new Error("Input must be 'yes' or 'no'");
+       return 0
     }
 }
 
@@ -644,6 +385,7 @@ export function sectorsFormat(input) {
 
 
 export function parseDegree(input) {
+    
     // Normalize the input string by converting to lowercase and trimming whitespace
     const normalizedInput = input.toLowerCase().trim();
 
@@ -652,10 +394,13 @@ export function parseDegree(input) {
         "bachelor": ["Bachelor"],
         "bs": ["Bachelor"],
         "bss": ["Bachelor"],
+        "bachelor's" :["Bachelor"],
+        "Bachelor's" :["Bachelor"],
         "phd": ["phd"],
         "doctor": ["phd"],
         "master": ["master"],
-        "ms": ["master"]
+        "ms": ["master"],
+        "university" : ["University degree"]
     };
 
     // Split the input string by spaces and check each part
@@ -677,3 +422,62 @@ export function parseDegree(input) {
     // Return the unique matched degrees array
     return uniqueDegrees;
 }
+
+
+export function parseExperience(input) {
+  const normalizedInput = input.toLowerCase().trim();
+
+  let from = "_";
+  let to = "_";
+  let period = "_";
+
+  if (normalizedInput.includes("no experience required")) {
+    return [`from: ${from}`, `to: ${to}`, `period: ${period}`];
+  }
+
+  const periodMapping = {
+    "year": "year",
+    "years": "year",
+    "month": "month",
+    "months": "month"
+  };
+
+  // Regular expressions for different experience formats
+  const regexPatterns = [
+    /(\d+)\s*to\s*(\d+)\s*(year|years|month|months)/, 
+    /more than\s*(\d+)\s*(year|years|month|months)/,
+    /less than\s*(\d+)\s*(year|years|month|months)/,
+    /(\d+)\s*(year|years|month|months)/
+  ];
+
+  for (const regex of regexPatterns) {
+    const match = normalizedInput.match(regex);
+    if (match) {
+      if (regex === regexPatterns[0]) {
+        // For "5 to 10 years" or "2 to 5 months"
+        from = parseInt(match[1], 10);
+        to = parseInt(match[2], 10);
+        period = periodMapping[match[3]];
+      } else if (regex === regexPatterns[1]) {
+        // For "More than 10 years"
+        from = parseInt(match[1], 10);
+        to = 100; // Arbitrary high number
+        period = periodMapping[match[2]];
+      } else if (regex === regexPatterns[2]) {
+        // For "Less than 10 years"
+        from = 0; // Arbitrary low number
+        to = parseInt(match[1], 10);
+        period = periodMapping[match[2]];
+      } else if (regex === regexPatterns[3]) {
+        // For "1 year" or "6 months"
+        from = parseInt(match[1], 10);
+        to = from;
+        period = periodMapping[match[2]];
+      }
+      break; // Exit loop after finding the first match
+    }
+  }
+
+return [`from: ${from}`, `to: ${to}`, `period: ${period}`];
+}
+

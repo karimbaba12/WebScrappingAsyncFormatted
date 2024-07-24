@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import "dotenv/config";
-import { formatDate, formatLocation,parseDegree ,formatSalaryRange , formatSalary, formatEmploymentPeriod, compareDates, formatDateAsUnix , formatString,splitLocationString,contractDaleel,parseYesNo,sectorsFormat} from './utils.js';
+import { formatDate, formatLocation,parseDegree ,formatSalaryRange , formatSalary, formatEmploymentPeriod, compareDates, formatDateAsUnix , formatString,splitLocationString,contractDaleel,parseYesNo,sectorsFormat, parseExperience} from './utils.js';
 
 const baseUrl = process.env.DALEELMADANI_URL || 'https://daleel-madani.org'
 
@@ -45,6 +45,7 @@ export const fetchJobs = async () => {
             const salary = jobSoup('.views-field-field-salary .field-content').text().trim();
             const salaryRange = jobSoup('.views-field-field-salary-range .field-content').text().trim();
             const educationDegree = jobSoup('.views-field-field-education-degree-details .field-content').text().trim();
+            const experience = jobSoup('.views-field-field-experience-requirements .field-content').text().trim();
             const deadline=compareDates(deadlineOut,deadlineIn);
      
 
@@ -77,6 +78,8 @@ export const fetchJobs = async () => {
                 DaleelDegree : parseDegree(educationDegree),
                 deadlineAppOut : deadlineOut,
                 deadlineAppIn : deadlineIn,
+                experience : parseExperience(experience),
+
             };
 
             allJobs.push(jobDetails);
@@ -100,12 +103,9 @@ export const fetchJobs = async () => {
             console.log(`Salary:  ${JSON.stringify(jobDetails.salary, null, 2)}`) ;
             console.log(`Salary range:  ${JSON.stringify(jobDetails.salaryRange, null, 2)}`);
             console.log(`Education degree: ${jobDetails.educationDegree}`);
-            console.log(`Education degree: ${jobDetails.DaleelDegree}`);
-
-           
-
-
-            console.log();
+            console.log(`Daleel degree: ${jobDetails.DaleelDegree}`);
+             console.log(`Experience: ${jobDetails.experience}`);
+             console.log();
         }
         page += 1;
     }
