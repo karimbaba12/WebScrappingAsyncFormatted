@@ -15,9 +15,137 @@ export const formatLocation = (location) => {
 };
 
 
-export const formatSectors = (sectorsStr) => {
-    return sectorsStr.split(',').map(sector => sector.trim().toUpperCase());
+
+    const validSectors = [
+    'Coordination & Information management',
+    'Development',
+    'Education',
+    'Gender issue',
+    'Human Rights & Protection',
+    'Advocacy & Awareness',
+    'Gender issues',
+    'Relief Services',
+    'Water sanitation and hygiene',
+    'Children & Youth',
+    'Conflict Resolution',
+    'Infrastructure & Services Rehabilitation',
+    'Research & Studies',
+    'Communications & Media',
+    'Agriculture',
+    'Health',
+    'Refugees',
+    'Environment',
+    'Safety and Security',
+    'Disability',
+    'Food & Nutrition',
+    'Women Status & Issues',
+    'Social & Cultural Development',
+    'Good governance and transparency',
+    'Science & Technology',
+    'Law & Legal Affairs',
+    'Mental Health',
+    'Peace & Security',
+    'Sports & Recreation',
+    'Training & Capacity Building'
+];
+
+export const formatValidSectors = (sectorsStr) => {
+
+    const sectors = sectorsStr.split(',');
+    const filteredSectors =sectors.filter(sector => validSectors.includes(sector))
+
+    const final = filteredSectors
+    .map(sector => sector.trim().toLowerCase().replace(/\s+/g, '_').replace(/&/g,'and'));
+    return final;
 };
+
+
+//invalid sectors
+export const formatInSectors = (sectorsStr) => {
+
+    const sectors = sectorsStr.split(',');
+    const invalidSectors = sectors.filter(sector => !(validSectors.includes(sector)));
+    const final = invalidSectors
+    .map(sector => sector.trim().toLowerCase().replace(/\s+/g, '_').replace(/&/g,'and'));
+    return final;
+};
+
+
+const validmajors= [
+'information management', 
+'computer science', 
+'data science',
+'public health', 
+'data management system',
+'Political Science', 
+'Public Policy', 
+'Environmental Studies',
+'Public Law', 
+'Social Science',
+'Psychomotor therapy',
+'Business Administration', 
+'Business Management',
+'Information Technology', 
+'Statistics',
+'economics',
+'Sociology',
+'Information systems',
+'Environmental Health',
+'Engineering',
+'Monitoring and Evaluation',
+'Sanitation',
+'Hygiene',
+'Demography',
+'Social studies',
+'Journalism', 
+'Media', 
+'Communications', 
+'Finance', 
+'Accounting', 
+'project management', 
+'gender', 
+'development studies', 
+'conflict management', 
+'Social Work', 
+'MBA', 
+'International Law', 
+'IT-Computer', 
+'PR-Protection', 
+'PR-Refugee', 
+'Education', 
+'children', 
+'Resources Management', 
+'advocacy', 
+'women’s economic empowerment', 
+'project cycle management', 
+'management', 
+'Nurse', 
+'Nursing', 
+'Business', 
+'social', 
+'English Literature', 
+'Psychology'
+
+];
+
+
+export const formatvalidmajors = (majorStr) => {
+     // Split the input string by comma and trim each major
+    const majors = majorStr.split(',').map(major => major.trim());
+
+    // Preprocess valid majors to match the same format
+    const processedValidMajors = validmajors.map(major => major.trim().toLowerCase().replace(/\s+/g, '_').replace(/&/g, 'and'));
+
+    // Process each major by trimming, converting to lowercase, replacing spaces with underscores, and '&' with 'and'
+    const formattedMajors = majors.map(major => major.toLowerCase().replace(/\s+/g, '_').replace(/&/g, 'and'));
+
+    // Filter the input majors to find matches in the valid majors
+    const filteredMajors = formattedMajors.filter(major => processedValidMajors.includes(major));
+
+    // Return the filtered majors
+    return filteredMajors;
+};
+
 
 export const  compareDates = (dateStr1, dateStr2) => {
     const date1 = new Date(dateStr1);
@@ -36,7 +164,6 @@ export const  compareDates = (dateStr1, dateStr2) => {
 
   export const formatSalaryRange = (salaryRange) => {
     salaryRange = salaryRange.trim();
-
     const matchA = salaryRange.match(/(\d+)\s*to\s*(\d+)\s*\((USD|\$)\)/);
     const matchB = salaryRange.match(/>\s*(\d+)\s*\((USD|\$)\)/);
     const matchC = salaryRange.match(/<\s*(\d+)\s*\((USD|\$)\)/);
@@ -153,17 +280,60 @@ export const formatSalary = (salary) => {
 
 
 
+// export const formatEmploymentPeriod = (periodStr) => {
+//     const patterns = [
+//         { pattern: /(\d+)\s*(months?|years?)/, handler: (match) => ({ number: parseInt(match[1]), scale: match[2].toLowerCase() }) },
+//         { pattern: /Till (the )?end (of )?(\w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+//         { pattern: /(\d+)\s+Months/, handler: (match) => ({ number: parseInt(match[1]), scale: 'months' }) },
+//         { pattern: /(\d+) (months?|years?) From (\w+ \d{1,2}(st|nd|rd|th)?, \d{4}) till (\w+ \d{1,2}(st|nd|rd|th)?, \d{4})/, handler: (match) => ({ number: parseInt(match[1]), scale: match[2].toLowerCase() }) },
+//         { pattern: /Until (\d{1,2} \w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+//         { pattern: /(\d{1,2}) ([A-Za-z]+), (\d{4}) - (\d{1,2}) ([A-Za-z]+), (\d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+//         { pattern: /Permanent/, handler: () => ({ number: 0, scale: 'permanent' }) }
+//     ];
+    
+//     for (let { pattern, handler } of patterns) {
+//         const match = periodStr.match(pattern);
+//         if (match) {
+//             return handler(match);
+//         }
+//     }
+
+//     return { number: 0, scale: 'unknown' };
+// };
+
+//formatting without my array
 export const formatEmploymentPeriod = (periodStr) => {
     const patterns = [
+        // Arabic pattern for months or years
+        { pattern: /(\d+)\s*(شهر|أشهر|سنة|سنوات)/, handler: (match) => ({ number: parseInt(match[1]), scale: match[2] }) },
+        // Arabic pattern for "Till the end of"
+        { pattern: /حتى نهاية (\w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+        // Arabic pattern for specific months
+        { pattern: /(\d+)\s+أشهر/, handler: (match) => ({ number: parseInt(match[1]), scale: 'أشهر' }) },
+        // Arabic pattern for period from date to date
+        { pattern: /(\d+) (شهر|سنة) من (\d{1,2} \w+ \d{4}) حتى (\d{1,2} \w+ \d{4})/, handler: (match) => ({ number: parseInt(match[1]), scale: match[2] }) },
+        // Arabic pattern for until specific date
+        { pattern: /حتى (\d{1,2} \w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+        // Arabic pattern for range of dates
+        { pattern: /(\d{1,2}) ([\u0600-\u06FF]+)، (\d{4}) - (\d{1,2}) ([\u0600-\u06FF]+)، (\d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+        // Arabic pattern for permanent employment
+        { pattern: /دائم/, handler: () => ({ number: 0, scale: 'دائم' }) },
+        // English pattern for months or years
         { pattern: /(\d+)\s*(months?|years?)/, handler: (match) => ({ number: parseInt(match[1]), scale: match[2].toLowerCase() }) },
-        { pattern: /Till (the )?end (of )?(\w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
-        { pattern: /(\d+)\s+Months/, handler: (match) => ({ number: parseInt(match[1]), scale: 'months' }) },
-        { pattern: /(\d+) (months?|years?) From (\w+ \d{1,2}(st|nd|rd|th)?, \d{4}) till (\w+ \d{1,2}(st|nd|rd|th)?, \d{4})/, handler: (match) => ({ number: parseInt(match[1]), scale: match[2].toLowerCase() }) },
-        { pattern: /Until (\d{1,2} \w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+        // English pattern for "Till the end of"
+        { pattern: /till the end of (\w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+        // English pattern for specific months
+        { pattern: /(\d+)\s+months?/, handler: (match) => ({ number: parseInt(match[1]), scale: 'months' }) },
+        // English pattern for period from date to date
+        { pattern: /(\d+) (months?|years?) from (\w+ \d{1,2}(st|nd|rd|th)?, \d{4}) till (\w+ \d{1,2}(st|nd|rd|th)?, \d{4})/, handler: (match) => ({ number: parseInt(match[1]), scale: match[2].toLowerCase() }) },
+        // English pattern for until specific date
+        { pattern: /until (\d{1,2} \w+ \d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
+        // English pattern for range of dates
         { pattern: /(\d{1,2}) ([A-Za-z]+), (\d{4}) - (\d{1,2}) ([A-Za-z]+), (\d{4})/, handler: () => ({ number: 0, scale: 'unknown' }) },
-        { pattern: /Permanent/, handler: () => ({ number: 0, scale: 'permanent' }) }
+        // English pattern for permanent employment
+        { pattern: /permanent/, handler: () => ({ number: 0, scale: 'permanent' }) }
     ];
-    
+
     for (let { pattern, handler } of patterns) {
         const match = periodStr.match(pattern);
         if (match) {
@@ -174,7 +344,9 @@ export const formatEmploymentPeriod = (periodStr) => {
     return { number: 0, scale: 'unknown' };
 };
 
-//formatting without my array
+
+
+
 export function formatString(locationStr){
 
  // Use a regular expression to add spaces before capitalized words
@@ -223,14 +395,15 @@ export function splitLocationString(inputStr) {
                 france: {},
                 pakistan: {},
                 morocco: {},
-                tunisia: {}
+                tunisia: {},
+                turkey: {},
             }
         },
         ara: {
             المناطق: {
                 لبنان: {
                     مناطق: {
-                        "جبل لبنان": ["متن", "متين", "عاليه", "بعبدا", "شوف", "جبيل", "كسروان"],
+                        "جبل لبنان": ["متن", "مت    ن", "عاليه", "بعبدا", "شوف", "جبيل", "كسروان"],
                         "الشمال": ["طرابلس", "الكورة", "بشري", "البترون", "عكار", "زغرتا"],
                         "البقاع": ["البقاع الغربي", "الهرمل", "بعلبك", "زحلة", "راشيا"],
                         "بعلبك-الهرمل": ["الهرمل", "بعلبك"],
@@ -252,7 +425,8 @@ export function splitLocationString(inputStr) {
                 فرنسا: {},
                 باكستان: {},
                 المغرب: {},
-                تونس: {}
+                تونس: {},
+                تركيا: {},
             }
         }
     };
@@ -368,21 +542,6 @@ export function parseYesNo(input) {
        return 0
     }
 }
-
-
-export function sectorsFormat(input) {
-    // Normalize the input string by converting to lowercase and trimming whitespace
-    const normalizedInput = input.toLowerCase().trim();
-
-    // Split the input string by commas and trim each part
-    const parts = normalizedInput.split(',').map(part => part.trim());
-
-    // Format each part by replacing non-word characters with underscores and removing extra spaces
-    const formattedParts = parts.map(part => part.replace(/[^\w\s]/g, '').replace(/\s+/g, '_'));
-
-    return formattedParts;
-}
-
 
 export function parseDegree(input) {
     

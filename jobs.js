@@ -1,7 +1,21 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import "dotenv/config";
-import { formatDate, formatLocation,parseDegree ,formatSalaryRange , formatSalary, formatEmploymentPeriod, compareDates, formatDateAsUnix , formatString,splitLocationString,contractDaleel,parseYesNo,sectorsFormat, parseExperience} from './utils.js';
+import { formatDate,
+    formatvalidmajors, 
+    formatLocation,
+    parseDegree ,
+    formatSalaryRange , 
+    formatSalary,
+     formatEmploymentPeriod, 
+     compareDates, 
+     formatDateAsUnix ,
+      formatString,
+      splitLocationString,
+      contractDaleel,
+      parseYesNo,
+      formatValidSectors, 
+      parseExperience} from './utils.js';
 
 const baseUrl = process.env.DALEELMADANI_URL || 'https://daleel-madani.org'
 
@@ -44,7 +58,8 @@ export const fetchJobs = async () => {
             const employmentPeriod = jobSoup('.views-field-field-period-of-employment .field-content').text().trim();
             const salary = jobSoup('.views-field-field-salary .field-content').text().trim();
             const salaryRange = jobSoup('.views-field-field-salary-range .field-content').text().trim();
-            const educationDegree = jobSoup('.views-field-field-education-degree-details .field-content').text().trim();
+            const educationDegree = jobSoup('.views-field-field-education-degree .field-content').text().trim();
+            const educationDetails = jobSoup('.views-field-field-education-degree-details .field-content').text().trim();
             const experience = jobSoup('.views-field-field-experience-requirements .field-content').text().trim();
             const deadline=compareDates(deadlineOut,deadlineIn);
      
@@ -70,7 +85,7 @@ export const fetchJobs = async () => {
                 modifiedDaleel: formatDateAsUnix(modifiedDate,'dd MMM, yyyy'),
                 agency: agency,
                 coverLetter: parseYesNo(requiresCoverLetter.toUpperCase()),
-                sectors: sectorsFormat(sectors),
+                sectors: formatValidSectors(sectors),
                 employmentPeriod: formatEmploymentPeriod(employmentPeriod),
                 salary: formatSalary(salary),
                 salaryRange: formatSalaryRange(salaryRange),
@@ -79,6 +94,8 @@ export const fetchJobs = async () => {
                 deadlineAppOut : deadlineOut,
                 deadlineAppIn : deadlineIn,
                 experience : parseExperience(experience),
+                educationDetails : parseDegree(educationDetails),
+                majors : formatvalidmajors(educationDetails)
 
             };
 
@@ -105,6 +122,8 @@ export const fetchJobs = async () => {
             console.log(`Education degree: ${jobDetails.educationDegree}`);
             console.log(`Daleel degree: ${jobDetails.DaleelDegree}`);
              console.log(`Experience: ${jobDetails.experience}`);
+             console.log(`Education details: ${jobDetails.educationDetails}`);
+             console.log(`Majors: ${jobDetails.majors}`);
              console.log();
         }
         page += 1;
