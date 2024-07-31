@@ -1,0 +1,56 @@
+{
+    "rules": {
+        ".read": "auth.uid === 'FSgph7esbSfkhNSyEAQRHh85B7l1'",
+        ".write": "auth.uid === 'FSgph7esbSfkhNSyEAQRHh85B7l1'",
+        "jobs": {
+            ".read": true,
+            ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+        },
+        "calls": {
+            ".read": true,
+            ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+        },
+        "adminRequests": {
+            "addJob": {
+                ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+            },
+            "addCall": {
+                ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+            },
+            "updateJob": {
+                ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+            },
+            "updateCall": {
+                ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+            },
+            "deleteJob": {
+                ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+            },
+            "deleteCall": {
+                ".write": "auth.uid === 'VysUik9iBGWOaliCKyrBJ8a0Cnr2'"
+            }
+        },
+        "userRequests": {
+            "$uid": {
+                "favoriteJob": {
+                    ".write": "auth.uid === $uid && auth.token.email_verified == true && !data.exists()"
+                },
+                "favoriteCall": {
+                    ".write": "auth.uid === $uid && auth.token.email_verified == true && !data.exists()"
+                },
+                "unfavoriteJob": {
+                    ".write": "auth.uid === $uid && auth.token.email_verified == true && !data.exists()"
+                },
+                "unfavoriteCall": {
+                    ".write": "auth.uid === $uid && auth.token.email_verified == true && !data.exists()"
+                },
+                "saveJob": {
+                    ".write": "auth.uid === $uid && auth.token.email_verified == true && !data.exists()"
+                },
+                "saveCall": {
+                    ".write": "auth.uid === $uid && auth.token.email_verified == true && !data.exists()"
+                }
+            }
+        }
+    }
+}
