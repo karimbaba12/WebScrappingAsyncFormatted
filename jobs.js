@@ -17,6 +17,7 @@ import {
   parseYesNo,
   formatValidSectors,
   parseExperience,
+  processLink
 } from "./utils.js";
 
 import { database, ref, set, signIn, auth } from "./firebaseConfig.js";
@@ -38,6 +39,10 @@ export const fetchJobs = async () => {
     for (let block of parentBlocks) {
       const jobLinkTag = $(block).find("div.field-name-title-field a");
       const title = jobLinkTag.text().trim();
+       let link = jobLinkTag.attr("href");
+      if (link.startsWith("/")) {
+        link = baseUrl + link;
+      }
       const location = $(block)
         .find("div.field-name-field-locations .shs-term-selected")
         .text()
@@ -56,10 +61,7 @@ export const fetchJobs = async () => {
         .find("div.field-name-og-group-ref a")
         .text()
         .trim();
-      let link = jobLinkTag.attr("href");
-      if (link.startsWith("/")) {
-        link = baseUrl + link;
-      }
+     
 
       // Fetch details from job link
       const jobResponse = await axios.get(link);
@@ -143,6 +145,7 @@ export const fetchJobs = async () => {
         experience: parseExperience(experience),
         educationDetails: parseDegree(educationDetails),
         majors: formatvalidmajors(educationDetails),
+        key : processLink(link)
       };
 
       //path of pushing in firebase

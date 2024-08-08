@@ -1,5 +1,8 @@
 node_modules/
 *.local
 .env
-calls.js
 index.js
+firebaseConfig.js
+firebase.json
+.firebaserc
+database.rules.json

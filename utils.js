@@ -333,6 +333,14 @@ export const formatEmploymentPeriod = (periodStr) => {
       pattern: /(\d+)\s+months?/,
       handler: (match) => ({ number: parseInt(match[1]), scale: "months" }),
     },
+    {
+      pattern: /(\d+)\s+Months?/,
+      handler: (match) => ({ number: parseInt(match[1]), scale: "months" }),
+    },
+    {
+      pattern: /(\d+)\s+Years?/,
+      handler: (match) => ({ number: parseInt(match[1]), scale: "Years" }),
+    },
     // English pattern for period from date to date
     {
       pattern:
@@ -428,6 +436,7 @@ export function splitLocationString(inputStr) {
         morocco: {},
         tunisia: {},
         turkey: {},
+        sweden:{},
       },
     },
     ara: {
@@ -466,6 +475,7 @@ export function splitLocationString(inputStr) {
         المغرب: {},
         تونس: {},
         تركيا: {},
+        السويد:{}
       },
     },
   };
@@ -680,3 +690,144 @@ export function parseExperience(input) {
 
   return [`from: ${from}`, `to: ${to}`, `period: ${period}`];
 }
+
+
+export function processLink(link) {
+  let upperCaseLink = link.toUpperCase();
+  let cleanedLink = upperCaseLink.replace(/[^A-Z0-9]/g, '');
+  let processedLink = cleanedLink.slice(-40);
+  if (processedLink.length < 40) {
+    processedLink = processedLink.padStart(40, '0');
+  }
+  return processedLink;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//calls
+
+
+
+
+export const formatTypeCall = (CallStr) => {
+  // Split the input string by comma and trim each Call
+  const Calls = CallStr.split(",").map((Call) => Call.trim());
+
+  // Preprocess valid Calls to match the same format
+  const processedValidCalls = contractTypes.map((Call) =>
+    Call.trim().toLowerCase().replace(/\s+/g, "_").replace(/&/g, "and")
+  );
+
+  // Process each Call by trimming, converting to lowercase, replacing spaces with underscores, and '&' with 'and'
+  const formattedCalls = Calls.map((Call) =>
+    Call.toLowerCase().replace(/\s+/g, "_").replace(/&/g, "and")
+  );
+
+  // Filter the input Calls to find matches in the valid Calls
+  const filteredCalls = formattedCalls.filter((Call) =>
+    processedValidCalls.includes(Call)
+  );
+
+  // Return the filtered Calls
+  return filteredCalls;
+};
+
+
+const contractTypes = [
+  "Call for Tenders",
+  "Call for Proposals",
+  "Call for Consultancies",
+  "Call for Applications",
+  "Call for Participation"
+];
+
+
+
+export const formatSectors = (SectorStr) => {
+  // Split the input string by comma and trim each Sector
+  const Sectors = SectorStr.split(",").map((Sector) => Sector.trim());
+
+  // Preprocess valid Sectors to match the same format
+  const processedValidSectors = SectorType.map((Sector) =>
+    Sector.trim().toLowerCase().replace(/\s+/g, "_").replace(/&/g, "and")
+  );
+
+  // Process each Sector by trimming, converting to lowercase, replacing spaces with underscores, and '&' with 'and'
+  const formattedSectors = Sectors.map((Sector) =>
+    Sector.toLowerCase().replace(/\s+/g, "_").replace(/&/g, "and")
+  );
+
+  // Filter the input Sectors to find matches in the valid Sectors
+  const filteredSectors = formattedSectors.filter((Sector) =>
+    processedValidSectors.includes(Sector)
+  );
+
+  // Return the filtered Sectors
+  return filteredSectors;
+};
+
+const SectorType = [
+  "Water sanitation and hygiene",
+  "Health",
+  "Communications & Media",
+  "Displaced Population",
+  "Human Rights & Protection",
+  "Labor & Livelihoods",
+  "Displaced Population",
+  "Refugees",
+  "Advocacy & Awareness",
+  "Women Status & Issues",
+  "Agriculture",
+  "Food & Nutrition",
+  "Safety and Security",
+  "Conflict Resolution",
+  "Children & Youth",
+  "Development",
+  "Displaced Population",
+  "Recovery and reconstruction",
+  "Democracy & Civic rights",
+  "Relief Services",
+  "Education",
+  "Training & Capacity Building",
+  "Science & Technology",
+  "Research & Studies",
+  "Gender issues",
+  "Rehabilitation",
+  "Sports & Recreation",
+  "Social & Cultural Development",
+  "Mental Health",
+  "Infrastructure & Services Rehabilitation",
+  "Shelter and Non-Food Items",
+  "Law & Legal Affairs",
+  "Environment",
+  "Business & Economic Policy",
+  "Humanitarian & Development Financing",
+  "Water sanitation and hygiene",
+  "Citizenship",
+  "Culture",
+  "Women Status & Issues",
+  "Good governance and transparency",
+  "Peace & Security"
+
+]
